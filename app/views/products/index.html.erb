@@ -15,10 +15,11 @@
     <% @products.each do |product| %>
       <tr>
         <td><%= product.nome %></td>
-        <td><%= product.preco %></td>
+        <td><%= number_to_currency product.preco %></td>
         <td><%= link_to 'Show', product %></td>
         <td><%= link_to 'Edit', edit_product_path(product) %></td>
         <td><%= link_to 'Destroy', product, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <td><%= button_to 'Add to Cart', line_items_path(product_id: product) %></td>
       </tr>
     <% end %>
   </tbody>
@@ -27,3 +28,9 @@
 <br>
 
 <%= link_to 'New Product', new_product_path %>
+<p>Carrinho: <%=@cart.line_items.count%></p>
+<p><%= link_to 'Detalhamento', line_items_path %></p>
+<p><%= link_to 'Limpar Carrinho', @cart, method: :delete, data: { confirm: 'Are you sure?' } %></p>
+
+<br>
+

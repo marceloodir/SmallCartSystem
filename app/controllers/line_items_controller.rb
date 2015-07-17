@@ -4,7 +4,7 @@ class LineItemsController < ApplicationController
   # GET /line_items
   # GET /line_items.json
   def index
-    @line_items = LineItem.all
+    @line_items = current_cart.line_items
   end
 
   # GET /line_items/1
@@ -27,12 +27,10 @@ class LineItemsController < ApplicationController
     @line_item = LineItem.new(line_item_params)
 
     respond_to do |format|
-      if @line_item.save
-        format.html { redirect_to @line_item, notice: 'Line item was successfully created.' }
-        format.json { render :show, status: :created, location: @line_item }
+      if current_cart.line_items << @line_item
+        format.html { redirect_to root_path, notice: 'Line item was successfully created.' }
       else
-        format.html { render :new }
-        format.json { render json: @line_item.errors, status: :unprocessable_entity }
+        format.html { redirect_to root_path, notice: 'Algo deu errado ao adicionar esse item.' }
       end
     end
   end
@@ -69,6 +67,7 @@ class LineItemsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def line_item_params
-      params.require(:line_item).permit(:product_id, :cart_id)
+      params.permit(:product_id)
     end
+
 end

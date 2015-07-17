@@ -5,6 +5,7 @@ class ProductsController < ApplicationController
   # GET /products.json
   def index
     @products = Product.all
+    @cart = current_cart
   end
 
   # GET /products/1
@@ -69,6 +70,7 @@ class ProductsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def product_params
+      puts params
       params.require(:product).permit(:nome, :preco)
     end
 end
