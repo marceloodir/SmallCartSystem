@@ -12,12 +12,11 @@
   <% end %>
 
   <div class="field">
-    <%= f.label :product_id %><br>
-    <%= f.text_field :product_id %>
+    <%= @line_item.product.nome %><br>
   </div>
   <div class="field">
-    <%= f.label :cart_id %><br>
-    <%= f.text_field :cart_id %>
+    Quantidate:<br>
+    <%= f.text_field :quantity %>
   </div>
   <div class="actions">
     <%= f.submit %>

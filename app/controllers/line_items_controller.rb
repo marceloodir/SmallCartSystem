@@ -5,6 +5,7 @@ class LineItemsController < ApplicationController
   # GET /line_items.json
   def index
     @line_items = current_cart.line_items
+    @cart = current_cart
   end
 
   # GET /line_items/1
@@ -25,9 +26,8 @@ class LineItemsController < ApplicationController
   # POST /line_items.json
   def create
     @line_item = LineItem.new(line_item_params)
-
     respond_to do |format|
-      if current_cart.line_items << @line_item
+      if add_line_item_to_cart
         format.html { redirect_to root_path, notice: 'Line item was successfully created.' }
       else
         format.html { redirect_to root_path, notice: 'Algo deu errado ao adicionar esse item.' }
@@ -38,13 +38,18 @@ class LineItemsController < ApplicationController
   # PATCH/PUT /line_items/1
   # PATCH/PUT /line_items/1.json
   def update
-    respond_to do |format|
-      if @line_item.update(line_item_params)
-        format.html { redirect_to @line_item, notice: 'Line item was successfully updated.' }
-        format.json { render :show, status: :ok, location: @line_item }
-      else
-        format.html { render :edit }
-        format.json { render json: @line_item.errors, status: :unprocessable_entity }
+    puts '#################' + line_item_params[:line_item]
+    if line_item_params[:line_item].quantity <= 0
+      destroy
+    else
+      respond_to do |format|
+        if @line_item.update(line_item_params)
+          format.html { redirect_to @line_item, notice: 'Line item was successfully updated.' }
+          format.json { render :show, status: :ok, location: @line_item }
+        else
+          format.html { render :edit }
+          format.json { render json: @line_item.errors, status: :unprocessable_entity }
+        end
       end
     end
   end
@@ -67,7 +72,18 @@ class LineItemsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def line_item_params
-      params.permit(:product_id)
+      params.permit(:product_id, :cart_id, :quantity)
+    end
+
+    def add_line_item_to_cart
+      current_line_items = current_cart.line_items
+      line_item = current_line_items.find_by(product: @line_item.product)
+      if line_item
+        line_item.quantity = line_item.quantity + 1
+        line_item.save
+      else
+        current_line_items << @line_item
+      end
     end
 
 end

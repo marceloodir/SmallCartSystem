@@ -28,9 +28,9 @@
 <br>
 
 <%= link_to 'New Product', new_product_path %>
-<p>Carrinho: <%=@cart.line_items.count%></p>
-<p><%= link_to 'Detalhamento', line_items_path %></p>
-<p><%= link_to 'Limpar Carrinho', @cart, method: :delete, data: { confirm: 'Are you sure?' } %></p>
+<p>Qte Itens no Carrinho: <%=@cart.quantity_total%></p>
+<p><%= link_to 'Detalhamento do carrinho', line_items_path %></p>
+<p>## DEBUG: ID do Cart: <%= session[:cart_id] %></p>
 
 <br>
 

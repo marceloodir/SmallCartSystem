@@ -4,13 +4,11 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
 
   def current_cart
-    unless Cart.find_by(session[:cart_id])
-      @cart = Cart.create
-      session[:cart_id] = @cart.id
-      @cart
-    else
-      @cart = Cart.find_by(session[:cart_id])
-    end
+    return Cart.find(session[:cart_id])
+    rescue ActiveRecord::RecordNotFound
+      cart = Cart.create
+      session[:cart_id] = cart.id
+      return cart
   end
 
 end
