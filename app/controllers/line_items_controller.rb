@@ -38,17 +38,16 @@ class LineItemsController < ApplicationController
   # PATCH/PUT /line_items/1
   # PATCH/PUT /line_items/1.json
   def update
-    puts '#################' + line_item_params[:line_item]
-    if line_item_params[:line_item].quantity <= 0
+    if line_item_params[:quantity].to_i <= 0
       destroy
     else
       respond_to do |format|
         if @line_item.update(line_item_params)
-          format.html { redirect_to @line_item, notice: 'Line item was successfully updated.' }
-          format.json { render :show, status: :ok, location: @line_item }
+          format.html { redirect_to line_items_path, notice: 'Line item was successfully updated.' }
+          format.json { render :index, status: :ok, location: line_items_path }
         else
-          format.html { render :edit }
-          format.json { render json: @line_item.errors, status: :unprocessable_entity }
+          format.html { render :index }
+          format.json { render json: line_items_path, status: :unprocessable_entity }
         end
       end
     end
@@ -72,7 +71,8 @@ class LineItemsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def line_item_params
-      params.permit(:product_id, :cart_id, :quantity)
+      #params.require(:line_item).permit(:cart_id, :product_id, :quantity)
+      params.permit(:quantity,:product_id)
     end
 
     def add_line_item_to_cart

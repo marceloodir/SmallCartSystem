@@ -1,6 +1,12 @@
 <h1>Editing Line Item</h1>
 
-<%= render 'form' %>
 
-<%= link_to 'Show', @line_item %> |
+<%= form_tag line_item_path, :method => 'patch' do %>
+    <%= label_tag 'Produto:' %>
+    <%= @line_item.product.nome %><br>
+    <%= label_tag 'Quantidade:' %><br>
+    <%= text_field_tag :quantity, @line_item.quantity%><br><br>
+    <%= submit_tag 'Atualizar Carrinho' %>
+<% end %>
+
 <%= link_to 'Back', line_items_path %>

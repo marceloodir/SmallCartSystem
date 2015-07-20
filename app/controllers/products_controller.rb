@@ -6,7 +6,6 @@ class ProductsController < ApplicationController
   def index
     @products = Product.all
     @cart = current_cart
-    @line_item = LineItem.new
   end
 
   # GET /products/1
